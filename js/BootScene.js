@@ -6,75 +6,9 @@ class BootScene extends Phaser.Scene {
 
     preload() {
 
-        // =====================================================
-        // LOADING UI
-        // =====================================================
-
-        const centerX = this.cameras.main.centerX;
-        const centerY = this.cameras.main.centerY;
-
-        const loadingText = this.add.text(
-            centerX,
-            centerY - 70,
-            "HAUNTED SHOOTER",
-            {
-                fontSize: "32px",
-                fontFamily: "Arial",
-                color: "#FFD700",
-                fontStyle: "bold"
-            }
-        ).setOrigin(0.5);
-
-        const statusText = this.add.text(
-            centerX,
-            centerY - 25,
-            "Loading assets...",
-            {
-                fontSize: "20px",
-                fontFamily: "Arial",
-                color: "#FFFFFF"
-            }
-        ).setOrigin(0.5);
-
-        const percentText = this.add.text(
-            centerX,
-            centerY + 25,
-            "0%",
-            {
-                fontSize: "24px",
-                fontFamily: "Arial",
-                color: "#00FF00"
-            }
-        ).setOrigin(0.5);
-
-
-        // =====================================================
-        // LOADING BAR
-        // =====================================================
-
-        const barWidth = 400;
-        const barHeight = 25;
-
-        const barBackground = this.add.rectangle(
-            centerX,
-            centerY + 70,
-            barWidth,
-            barHeight,
-            0x222222
-        );
-
-        const progressBar = this.add.rectangle(
-            centerX - barWidth / 2,
-            centerY + 70,
-            0,
-            barHeight,
-            0x00ff00
-        ).setOrigin(0, 0.5);
-
-
-        // =====================================================
+        // ==========================
         // IMAGES
-        // =====================================================
+        // ==========================
 
         this.load.image(
             "player",
@@ -105,89 +39,79 @@ class BootScene extends Phaser.Scene {
             "background",
             "assets/images/background.png"
         );
-
-        this.load.image(
-            "snake",
-            "assets/images/snake.png"
-        );
-
-
-        // =====================================================
-        // AUDIO
-        // =====================================================
-
-        this.load.audio(
-            "laser_new",
-            "assets/audio/laser_new.wav"
-        );
-
-        this.load.audio(
-            "shoot_new",
-            "assets/audio/shoot_new.wav"
-        );
-
-        this.load.audio(
-            "hit_new",
-            "assets/audio/hit_new.wav"
-        );
+		
+		this.load.image(
+			"snake",
+			"assets/images/snake.png"
+		);
 
 
-        // =====================================================
+        // ==========================
+		// AUDIO
+		// ==========================
+
+		this.load.audio(
+			"laser_new",
+			"assets/audio/laser_new.wav"
+		);
+
+		this.load.audio(
+			"shoot_new",
+			"assets/audio/shoot_new.wav"
+		);
+
+		this.load.audio(
+			"hit_new",
+			"assets/audio/hit_new.wav"
+		);
+
+        // ==========================
+        // LOADING TEXT
+        // ==========================
+
+        const loadingText = this.add.text(
+            this.cameras.main.centerX,
+            this.cameras.main.centerY - 30,
+            "Loading...",
+            {
+                fontSize: "30px",
+                color: "#FFD700"
+            }
+        ).setOrigin(0.5);
+
+
+        const percentText = this.add.text(
+            this.cameras.main.centerX,
+            this.cameras.main.centerY + 20,
+            "0%",
+            {
+                fontSize: "22px",
+                color: "#FFFFFF"
+            }
+        ).setOrigin(0.5);
+
+
+        // ==========================
         // LOADING PROGRESS
-        // =====================================================
+        // ==========================
 
         this.load.on("progress", (value) => {
 
-            const percent = Math.floor(value * 100);
-
-            percentText.setText(percent + "%");
-
-            progressBar.width = barWidth * value;
-
-            statusText.setText(
-                "Loading assets... " + percent + "%"
+            percentText.setText(
+                Math.floor(value * 100) + "%"
             );
 
         });
 
 
-        // =====================================================
-        // FILE LOAD ERROR
-        // =====================================================
-
-        this.load.on("loaderror", (file) => {
-
-            console.error(
-                "ASSET LOAD ERROR:",
-                file.key,
-                file.src
-            );
-
-            statusText.setText(
-                "ERROR: " + file.key
-            );
-
-            statusText.setColor("#FF0000");
-
-        });
-
-
-        // =====================================================
-        // COMPLETE
-        // =====================================================
+        // ==========================
+        // LOAD COMPLETE
+        // ==========================
 
         this.load.on("complete", () => {
 
-            console.log("==============================");
-            console.log("HAUNTED SHOOTER");
-            console.log("All assets loading completed.");
-            console.log("==============================");
-
             loadingText.destroy();
-            statusText.destroy();
             percentText.destroy();
-            barBackground.destroy();
-            progressBar.destroy();
 
         });
 
@@ -196,87 +120,52 @@ class BootScene extends Phaser.Scene {
 
     create() {
 
-        // =====================================================
-        // ASSET CHECK
-        // =====================================================
+        console.log("==========================");
+        console.log("Assets Loaded Successfully");
+        console.log("==========================");
 
-        console.log("========== ASSET CHECK ==========");
+
+        // ==========================
+        // CHECK ASSETS
+        // ==========================
 
         console.log(
-            "Player:",
+            "Player     :",
             this.textures.exists("player")
         );
 
         console.log(
-            "Gun:",
+            "Gun        :",
             this.textures.exists("gun")
         );
 
         console.log(
-            "Bat:",
+            "Bat        :",
             this.textures.exists("bat")
         );
 
         console.log(
-            "Witch:",
+            "Witch      :",
             this.textures.exists("witch")
         );
 
         console.log(
-            "Fire:",
+            "Fire       :",
             this.textures.exists("fire")
         );
 
         console.log(
-            "Background:",
+            "Background :",
             this.textures.exists("background")
         );
 
-        console.log(
-            "Snake:",
-            this.textures.exists("snake")
-        );
 
-        console.log("================================");
-
-
-        // =====================================================
-        // CHECK AUDIO
-        // =====================================================
-
-        console.log(
-            "Laser:",
-            this.cache.audio.exists("laser_new")
-        );
-
-        console.log(
-            "Shoot:",
-            this.cache.audio.exists("shoot_new")
-        );
-
-        console.log(
-            "Hit:",
-            this.cache.audio.exists("hit_new")
-        );
-
-
-        // =====================================================
+        // ==========================
         // START MENU
-        // =====================================================
-
-        console.log("Starting MenuScene...");
+        // ==========================
 
         this.scene.start("MenuScene");
 
     }
 
-}
-
-
-// =========================================================
-// EXPORT
-// =========================================================
-
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = BootScene;
 }
